@@ -1,0 +1,21 @@
+{
+  "name": "ucoz/uapi-client",
+  "description": "PHP client for uAPI",
+  "type": "library",
+  "keywords": ["API", "uCoz"],
+  "homepage": "http://api.ucoz.net/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sergey Mitrichev",
+      "email": "sm@ucoz-team.net"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-0": { "Uapi\\": "lib/" }
+  }
+}
