@@ -4,7 +4,6 @@
   "type": "library",
   "keywords": ["API", "uCoz"],
   "homepage": "http://api.ucoz.net/",
-  "version": "0.1",
   "license": "MIT",
   "authors": [
     {
@@ -17,6 +16,6 @@
     "ext-curl": "*"
   },
   "autoload": {
-    "psr-0": { "Uapi\\": "lib/" }
+    "psr-0": { "APIuCoz\\": "lib/" }
   }
 }

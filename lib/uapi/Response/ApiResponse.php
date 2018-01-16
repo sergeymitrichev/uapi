@@ -59,6 +59,15 @@ class ApiResponse implements \ArrayAccess
     }
 
     /**
+     * Return error message
+     *
+     * @return string
+     */
+    public function getErrorMsg() {
+        return $this->response['error']['msg'];
+    }
+
+    /**
      * Allow to access for the property throw class method
      *
      * @param string $name      method name

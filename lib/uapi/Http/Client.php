@@ -62,9 +62,10 @@ class Client
             );
         }
 
+        $this->defaultParameters['oauth_nonce'] = md5(microtime() . mt_rand());
         $params = array_merge($this->defaultParameters, $params);
 
-        $url = $this->site. 'uapi' . $path;
+        $url = $this->site. 'uapi' . trim(strtolower($path), '') . '';
 
         $curlHandler = curl_init();
 
@@ -73,6 +74,7 @@ class Client
                 if ($method && count($params)) {
                     $url .= '?' . http_build_query($params + array('oauth_signature' => $this->getSignature($method, $url, $params)));
                 }
+                break;
             }
             case self::METHOD_POST: {
                 // TODO add POST methods
@@ -85,6 +87,7 @@ class Client
                         implode(', ', $allowedMethods)
                     )
                 );
+                break;
             }
             case self::METHOD_PUT: {
                 // TODO add PUT methods
@@ -95,6 +98,7 @@ class Client
                         implode(', ', $allowedMethods)
                     )
                 );
+                break;
 
             }
             case self::METHOD_DELETE: {
@@ -142,6 +146,6 @@ class Client
     private function getSignature($method, $url, $params) {
         ksort($params);
         $baseString = strtoupper($method) . '&' . urlencode($url) . '&' . urlencode(strtr(http_build_query($params), array ('+' => '%20')));
-        return urlencode(base64_encode(hash_hmac('sha1', $baseString, $this->secrets->consumer . '&' . $this->secrets->token, true)));
+        return urlencode(base64_encode(hash_hmac('sha1', $baseString, $this->secrets['consumer'] . '&' . $this->secrets['token'], true)));
     }
 }

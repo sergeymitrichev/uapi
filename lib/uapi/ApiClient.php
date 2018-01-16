@@ -27,7 +27,6 @@ class ApiClient
         $params = array(
             'oauth_version' =>  '1.0',
             'oauth_timestamp' => time(),
-            'oauth_nonce' => md5(microtime() . mt_rand()),
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_consumer_key' => $consumer_key,
             'oauth_token' => $token,
