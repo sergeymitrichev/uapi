@@ -63,6 +63,7 @@ class Client
         }
 
         $this->defaultParameters['oauth_nonce'] = md5(microtime() . mt_rand());
+        $params = array_merge($this->defaultParameters, $params);
 
         $url = $this->site. 'uapi' . trim(strtolower($path), '') . '';
 
@@ -70,7 +71,6 @@ class Client
 
         switch ($method) {
             case self::METHOD_GET: {
-                $params = array_merge($this->defaultParameters, $params);
                 $url .= '?' . http_build_query($params + array('oauth_signature' => $this->getSignature($method, $url, $params)));
                 break;
             }
@@ -78,7 +78,8 @@ class Client
                 if(isset($params['file1'])) {
                     $params = $this->getFilesArray($url, $params);
                 }
-                $params = $params + $this->defaultParameters + array('oauth_signature' => $this->getSignature($method, $url, $this->defaultParameters + preg_replace_callback('/^@(.+)$/', array($this, 'getBaseName'), $params)));
+                $params += array('oauth_signature' => $this->getSignature($method, $url, preg_replace_callback('/^@(.+)$/', array($this, 'getBaseName'), $params)));
+
                 curl_setopt($curlHandler, CURLOPT_POST, true);
                 curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
                 throw new \InvalidArgumentException(
@@ -180,7 +181,7 @@ class Client
     }
     /**
      * Returns basename for request signature
-     * @param array $match 
+     * @param array $match
      * @return string
      */
     private function getBaseName($match) {
