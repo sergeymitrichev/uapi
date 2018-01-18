@@ -63,6 +63,7 @@ class Client
         }
 
         $this->defaultParameters['oauth_nonce'] = md5(microtime() . mt_rand());
+        $params = array_merge($this->defaultParameters, $params);
 
         $url = $this->site. 'uapi' . trim(strtolower($path), '') . '';
 
@@ -70,17 +71,15 @@ class Client
 
         switch ($method) {
             case self::METHOD_GET: {
-                $params = array_merge($this->defaultParameters, $params);
-                $url .= '?' . http_build_query($params + array('oauth_signature' => $this->getSignature($method, $url, $params)));
+                if ($method && count($params)) {
+                    $url .= '?' . http_build_query($params + array('oauth_signature' => $this->getSignature($method, $url, $params)));
+                }
                 break;
             }
             case self::METHOD_POST: {
-                if(isset($params['file1'])) {
-                    $params = $this->getFilesArray($url, $params);
-                }
-                $params = $params + $this->defaultParameters + array('oauth_signature' => $this->getSignature($method, $url, $this->defaultParameters + preg_replace_callback('/^@(.+)$/', array($this, 'getBaseName'), $params)));
-                curl_setopt($curlHandler, CURLOPT_POST, true);
-                curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
+                // TODO add POST methods
+                //curl_setopt($curlHandler, CURLOPT_POST, true);
+                //curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
                 throw new \InvalidArgumentException(
                     sprintf(
                         'Method "%s" is not valid. Allowed methods are %s',
@@ -149,38 +148,9 @@ class Client
         $baseString = strtoupper($method) . '&' . urlencode($url) . '&' . urlencode(strtr(http_build_query($params), array ('+' => '%20')));
         return urlencode(base64_encode(hash_hmac('sha1', $baseString, $this->secrets['consumer'] . '&' . $this->secrets['token'], true)));
     }
-
     /**
-     * Return params array with files, prepared to get valid signature
-     * @param string $url       api url
-     * @param array  $params
-     * @return array
-     */
-    private function getFilesArray($url, $params){
-        $filesCount = 0;
-        /*
-        * Shop uploaded images limited by $params['file_add_cnt'] and have to be less then 20
-        * Other uploaded images have to be less then 50
-        */
-        $filesLimit = isset($params['file_add_cnt']) ? $params['file_add_cnt'] : 50;
-        /*
-         * Shop uploaded images have to be in 'file_add_1', 'file_add_2' and so on
-         * Other uploaded images have to be in 'file1', 'file2' and so on
-         */
-        $filePrefix = ($url == '/shop/editgoods') ? 'file_add_' : 'file';
-        while (!empty($params[$filePrefix . ++$filesCount]) && $filesCount < $filesLimit) {
-            $fileName = basename($params[$filePrefix . $filesCount]);
-            if (strpos($fileName, '@') === false) {
-                $fileName = '@' . $fileName;
-            }
-            $params[$filePrefix . $filesCount] = $fileName;
-        }
-
-        return $params;
-    }
-    /**
-     * Returns basename for request signature
-     * @param array $match 
+     * Return base filname for request signature
+     * @param array $match  Совпадения при поиске по регулярному выражению preg_replace_callback
      * @return string
      */
     private function getBaseName($match) {
