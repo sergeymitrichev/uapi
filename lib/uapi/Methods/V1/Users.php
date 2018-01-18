@@ -58,7 +58,7 @@ trait Users
 
         return $this->client->makeRequest(
             '/users',
-            "POST",
+            'POST',
             json_encode($user)
         );
     }
