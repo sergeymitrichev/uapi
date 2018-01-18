@@ -82,13 +82,6 @@ class Client
 
                 curl_setopt($curlHandler, CURLOPT_POST, true);
                 curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Method "%s" is not valid. Allowed methods are %s',
-                        $method,
-                        implode(', ', $allowedMethods)
-                    )
-                );
                 break;
             }
             case self::METHOD_PUT: {
