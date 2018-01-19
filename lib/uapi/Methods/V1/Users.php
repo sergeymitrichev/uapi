@@ -63,4 +63,56 @@ trait Users
         );
     }
 
+    /**
+     * Get a user by ID
+     *
+     * @param int  $userId user ID
+     *
+     * @throws \InvalidArgumentException
+     * @throws \APIuCoz\Exception\CurlException
+     * @throws \APIuCoz\Exception\InvalidJsonException
+     *
+     * @return \APIuCoz\Response\ApiResponse
+     */
+    public function usersGetById(int $userId)
+    {
+        if (!isset($userId)) {
+            throw new \InvalidArgumentException(
+                'Parameter `customer` must contains a data'
+            );
+        }
+
+        return $this->client->makeRequest(
+            '/users',
+            "GET",
+            array('user_id' =>  $userId)
+        );
+    }
+
+    /**
+     * Get a user by login
+     *
+     * @param string  $userLogin user login
+     *
+     * @throws \InvalidArgumentException
+     * @throws \APIuCoz\Exception\CurlException
+     * @throws \APIuCoz\Exception\InvalidJsonException
+     *
+     * @return \APIuCoz\Response\ApiResponse
+     */
+    public function usersGetByLogin(string $userLogin)
+    {
+        if (!isset($userLogin)) {
+            throw new \InvalidArgumentException(
+                'Parameter `customer` must contains a data'
+            );
+        }
+
+        return $this->client->makeRequest(
+            '/users',
+            "GET",
+            array('user' =>  $userLogin)
+        );
+    }
+
 }

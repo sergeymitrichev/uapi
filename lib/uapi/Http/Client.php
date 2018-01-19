@@ -1,6 +1,5 @@
 <?php
 
-
 namespace APIuCoz\Http;
 
 use APIuCoz\Exception\CurlException;
@@ -75,7 +74,7 @@ class Client
                 break;
             }
             case self::METHOD_POST: {
-                if(isset($params['file1'])) {
+                if(isset($params['file1']) || isset($params['file_add_1'])) {
                     $params = $this->getFilesArray($url, $params);
                 }
                 $params += array('oauth_signature' => $this->getSignature($method, $url, preg_replace_callback('/^@(.+)$/', array($this, 'getBaseName'), $params)));

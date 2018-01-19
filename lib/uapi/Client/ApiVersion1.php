@@ -22,5 +22,5 @@ class ApiVersion1 extends AbstractLoader
     }
 
     use V1\Users;
-
+    use V1\Products;
 }

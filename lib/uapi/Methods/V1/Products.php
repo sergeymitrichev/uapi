@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Anton
- * Date: 18.01.2018
- * Time: 14:34
- */
 
 namespace APIuCoz\Methods\V1;
 
@@ -57,22 +51,6 @@ trait Products
      */
     public function productsAddImage(array $images, $id)
     {
-        if (!count($images)) {
-            throw new \InvalidArgumentException(
-                'Parameter `images` must contains at least one image'
-            );
-        }
-
-        if (!isset($id)) {
-            throw new \InvalidArgumentException(
-                'Parameter `id` is not set'
-            );
-        }
-
-        return $this->client->makeRequest(
-            '/shop/addgoods',
-            "POST",
-            $images + array('method' => 'img-add', 'file_add_cnt' => count($images), 'id' => $id)
-        );
+        throw new \BadMethodCallException('This activity not allowed');
     }
 }
