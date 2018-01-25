@@ -52,13 +52,45 @@ trait Users
     {
         if (! count($user)) {
             throw new \InvalidArgumentException(
-                'Parameter `customer` must contains a data'
+                'Parameter `users` must contains a data'
             );
         }
 
         return $this->client->makeRequest(
             '/users',
             "POST",
+            $user
+        );
+    }
+
+    /**
+     * Update a user
+     *
+     * @param array  $user user data
+     *
+     * @throws \InvalidArgumentException
+     * @throws \APIuCoz\Exception\CurlException
+     * @throws \APIuCoz\Exception\InvalidJsonException
+     *
+     * @return \APIuCoz\Response\ApiResponse
+     */
+    public function usersUpdate(array $user)
+    {
+        if (!count($user)) {
+            throw new \InvalidArgumentException(
+                'Parameter `users` must contains a data'
+            );
+        }
+
+        if(!isset($user['user_id'])) {
+            throw new \InvalidArgumentException(
+                'Parameter `users` must contains `user_id`'
+            );
+        }
+
+        return $this->client->makeRequest(
+            '/users',
+            "PUT",
             $user
         );
     }
