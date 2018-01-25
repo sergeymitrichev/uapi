@@ -84,14 +84,13 @@ class Client
                 break;
             }
             case self::METHOD_PUT: {
-                // TODO add PUT methods
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Method "%s" is not valid. Allowed methods are %s',
-                        $method,
-                        implode(', ', $allowedMethods)
-                    )
-                );
+                if(isset($params['file1']) || isset($params['file_add_1'])) {
+                    $params = $this->getFilesArray($url, $params);
+                }
+                $params += array('oauth_signature' => $this->getSignature($method, $url, preg_replace_callback('/^@(.+)$/', array($this, 'getBaseName'), $params)));
+
+                curl_setopt($curlHandler, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
                 break;
 
             }
