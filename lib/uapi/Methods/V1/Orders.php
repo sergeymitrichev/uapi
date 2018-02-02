@@ -65,50 +65,81 @@ trait Orders
         );
     }
 
+
     /**
-     * Update an order
-     * Combines two basic uAPI methods:
-     * 1) Add products to order (use item ID'S in array $order['ids'])
-     * 2) Update price, quantity and remove products from order
-     *
-     * @param array  $order order data
-     *
-     * @throws \InvalidArgumentException
-     * @throws \APIuCoz\Exception\CurlException
-     * @throws \APIuCoz\Exception\InvalidJsonException
-     *
-     * @return \APIuCoz\Response\ApiResponse
+     * @string $statusId
+     * @param string $ids
+     * @param $statusId
+     * @return mixed
      */
-    public function ordersUpdate(array $order)
-    {
-        if (!count($order)) {
+    public function ordersChangeStatus(string $ids = '', string $statusId) {
+
+        if ($ids == '') {
             throw new \InvalidArgumentException(
-                'Parameter `order` must contains a data'
+                'Parameter `ids` must contains a data'
             );
         }
 
-        if(!isset($order['order'])) {
+        $params = ['ids' => $ids, 'status' => $statusId, 'mode' => 'status'];
+
+        return $this->client->makeRequest(
+            '/shop/invoices/',
+            "PUT",
+            $params
+        );
+    }
+
+    /**
+     * @param string $orderHash
+     * @param string $productId
+     * @return mixed
+     */
+    public function ordersAddItem(string $orderHash, string $productId) {
+
+        if(!isset($orderHash) || !isset($productId)) {
             throw new \InvalidArgumentException(
-                'Parameter `order` must contains order hash in `order` ($order[`order`] => `order_hash`)'
+                'Parameter `orderHash` and `productId` must contains a data'
             );
         }
 
-        if(isset($order['ids'])) {
-            $hash = $order['order'];
-            foreach ($order['ids'] as $productId) {
-                $this->client->makeRequest(
-                    '/shop/order',
-                    "POST",
-                    array('id'  => $productId, 'order' => $hash)
-                );
+        $params = ['order' => $orderHash, 'id' => $productId];
+
+
+        return $this->client->makeRequest(
+            '/shop/order/',
+            "POST",
+            $params
+        );
+    }
+
+    /**
+     * @param string $orderHash
+     * @param array $products
+     * @return mixed
+     */
+    public function ordersUpdateItems(string $orderHash, array $products = []) {
+
+        $params = [
+            'order' => $orderHash
+        ];
+
+        foreach ($products as $pid => $product) {
+            if (isset($product['toDelete'])) {
+                $params['del_' . $pid] = 1;
+                continue;
             }
-            unset($order['id']);
+            if (isset($product['cnt'])) {
+                $params['cnt_' . $pid] = $product['cnt'];
+            }
+            if (isset($product['price'])) {
+                $params['price_' . $pid] = $product['price'];
+            }
         }
 
         return $this->client->makeRequest(
-            '/shop/order',
-            "PUT",
-            $order
+            '/shop/order/',
+            "POST",
+            $params
         );
     }
 
