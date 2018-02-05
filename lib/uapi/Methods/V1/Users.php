@@ -8,8 +8,6 @@ trait Users
      * Returns filtered users list
      *
      * @param array $filter (default: array())
-     * @param int   $page   (default: null)
-     * @param int   $limit  (default: null)
      *
      * @throws \InvalidArgumentException
      * @throws \APIuCoz\Exception\CurlException
@@ -17,18 +15,12 @@ trait Users
      *
      * @return \APIuCoz\Response\ApiResponse
      */
-    public function usersList(array $filter = [], $page = null, $limit = null)
+    public function usersList(array $filter = [])
     {
         $parameters = [];
 
         if (count($filter)) {
-            $parameters['filter'] = $filter;
-        }
-        if (null !== $page) {
-            $parameters['page'] = (int) $page;
-        }
-        if (null !== $limit) {
-            $parameters['limit'] = (int) $limit;
+            $parameters = $filter;
         }
 
         return $this->client->makeRequest(
@@ -93,6 +85,29 @@ trait Users
             "PUT",
             $user
         );
+    }
+
+    /**
+     * Set user password
+     *
+     * @param array  $user user data
+     *
+     * @throws \InvalidArgumentException
+     * @throws \APIuCoz\Exception\CurlException
+     * @throws \APIuCoz\Exception\InvalidJsonException
+     *
+     * @return \APIuCoz\Response\ApiResponse
+     */
+    public function usersSetPassword($user_id, $password) {
+        //TODO add method usersSetPassword
+        if (!isset($password)) {
+            // generate password
+        }
+
+        // UAPI change password
+
+        // SENDPULSE send new password
+
     }
 
     /**
