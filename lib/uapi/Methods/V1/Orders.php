@@ -22,7 +22,7 @@ trait Orders
         $parameters = [];
 
         if (count($filter)) {
-            $parameters['filter'] = $filter;
+            $parameters = $filter;
         }
         if (null !== $page) {
             $parameters['page'] = (int) $page;
@@ -32,7 +32,7 @@ trait Orders
         }
 
         return $this->client->makeRequest(
-            '/shop/invoices',
+            '/shop/invoices/',
             "GET",
             $parameters
         );
@@ -59,7 +59,7 @@ trait Orders
         $order['mode'] = 'order';
 
         return $this->client->makeRequest(
-            '/shop/checkout',
+            '/shop/checkout/',
             "POST",
             $order
         );
@@ -90,6 +90,8 @@ trait Orders
     }
 
     /**
+     * Add new item to order
+     *
      * @param string $orderHash
      * @param string $productId
      * @return mixed
@@ -113,6 +115,7 @@ trait Orders
     }
 
     /**
+     * Update (quantity, price) and delete items in order
      * @param string $orderHash
      * @param array $products
      * @return mixed
@@ -163,7 +166,7 @@ trait Orders
         }
 
         return $this->client->makeRequest(
-            '/shop/order',
+            '/shop/order/',
             "GET",
             array('order' =>  $hash)
         );
