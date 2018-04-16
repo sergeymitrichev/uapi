@@ -14,7 +14,7 @@ trait System
         );
     }
 
-    public function getSites()
+    public function sitesGet()
     {
         return $this->client->makeRequest(
             '/mysites',

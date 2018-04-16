@@ -24,4 +24,6 @@ class ApiVersion1 extends AbstractLoader
     use V1\Users;
     use V1\Products;
     use V1\Orders;
+    use V1\System;
+    use V1\Currency;
 }
