@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: 2
- * Date: 16.04.2018
- * Time: 23:09
- */
 
 namespace APIuCoz\Methods\V1;
 
