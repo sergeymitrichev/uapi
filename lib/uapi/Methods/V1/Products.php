@@ -40,17 +40,34 @@ trait Products
     /**
      * Add image to product by ID
      *
-     * @param array  $images product images
+     * @param array $images product images
      * @param string $id product id
      *
-     * @throws \InvalidArgumentException
-     * @throws \APIuCoz\Exception\CurlException
-     * @throws \APIuCoz\Exception\InvalidJsonException
-     *
-     * @return \APIuCoz\Response\ApiResponse
+     * @return void
      */
     public function productsAddImage(array $images, $id)
     {
         throw new \BadMethodCallException('This activity not allowed');
+    }
+
+    public function productsUpdate(array $product)
+    {
+        if (!count($product)) {
+            throw new \InvalidArgumentException(
+                'Parameter `product` must contains a data'
+            );
+        }
+
+        if (!isset($product['cat_id']) || !isset($product['id'])) {
+            throw new \InvalidArgumentException(
+                'Parameter `product` must contains a `cat_id` and an `id`'
+            );
+        }
+
+        return $this->client->makeRequest(
+            '/shop/editgoods',
+            "POST",
+            $product + array('method' => 'submit')
+        );
     }
 }
