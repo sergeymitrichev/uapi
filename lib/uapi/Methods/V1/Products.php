@@ -70,4 +70,13 @@ trait Products
             $product + array('method' => 'submit')
         );
     }
+
+    public function productsList(array $filter = [])
+    {
+        return $this->client->makeRequest(
+            '/shop/request',
+            "GET",
+            $filter + array('page' => 'allgoods')
+        );
+    }
 }
