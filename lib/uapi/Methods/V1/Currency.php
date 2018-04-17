@@ -8,24 +8,24 @@ trait Currency
     public function currenciesList()
     {
         return $this->client->makeRequest(
-            '/shop/getshopdata',
+            '/shop/getshopdata/',
             "GET",
             array('page' => 'currencies_list')
         );
     }
 
-    public function currencyUpdate($currencyCode, $currencyRate)
+    public function currencyUpdate($code, $rate)
     {
-        if (!isset($currencyCode) || !isset($currencyRate)) {
+        if (!isset($code) || !isset($rate)) {
             throw new \InvalidArgumentException(
-                'Parameters `$currencyCode` and `currencyRate` must contains a data'
+                'Parameters `$code` and `$rate` must contains a data'
             );
         }
 
         return $this->client->makeRequest(
-            '/shop/getshopdata',
+            '/shop/setcurrrate',
             "GET",
-            array('curr_code' => $currencyCode, 'curr_rate' => $currencyRate)
+            array('curr_code' => $code, 'curr_rate' => $rate)
         );
     }
 }
