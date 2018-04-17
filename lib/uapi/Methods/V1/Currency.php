@@ -24,7 +24,7 @@ trait Currency
 
         return $this->client->makeRequest(
             '/shop/setcurrrate',
-            "GET",
+            "POST",
             array('curr_code' => $code, 'curr_rate' => $rate)
         );
     }
