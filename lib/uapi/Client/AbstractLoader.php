@@ -12,7 +12,7 @@ class AbstractLoader
      * Init version based client
      *
      * @param string $site    site code
-     * @param string $params  oauth deny params
+     * @param array $params  oauth deny params
      * @param string $version api version
      */
     public function __construct($site, $params, $secrets, $version)
